@@ -1,0 +1,11 @@
+venv/
+__pycache__/
+*.pyc
+.env
+.pytest_cache/
+uploads/
+outputs/
+logs/
+static/exports/
+*.sqlite3
+.vercel/

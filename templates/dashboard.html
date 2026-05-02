@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<section class="py-4">
+    <div class="container">
+        <h2 class="section-title mb-4">Analytics Dashboard</h2>
+
+        <!-- Stats Row -->
+        <div class="row g-4 mb-4">
+            <div class="col-6 col-md-3">
+                <div class="glass-card stat-card">
+                    <div class="stat-value" id="statUploads">—</div>
+                    <div class="stat-label">Total Uploads</div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="glass-card stat-card">
+                    <div class="stat-value" id="statQuestions">—</div>
+                    <div class="stat-label">Questions Generated</div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="glass-card stat-card">
+                    <div class="stat-value" id="statAvgTime">—</div>
+                    <div class="stat-label">Avg Time (sec)</div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="glass-card stat-card">
+                    <div class="stat-value" id="statTopType">—</div>
+                    <div class="stat-label">Most Common Type</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Row -->
+        <div class="row g-4 mb-4">
+            <div class="col-md-4">
+                <div class="glass-card">
+                    <h6 class="fw-bold mb-3"><i class="bi bi-pie-chart me-2"></i>Question Types</h6>
+                    <div class="chart-container"><canvas id="chartType"></canvas></div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="glass-card">
+                    <h6 class="fw-bold mb-3"><i class="bi bi-bar-chart me-2"></i>Difficulty</h6>
+                    <div class="chart-container"><canvas id="chartDifficulty"></canvas></div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="glass-card">
+                    <h6 class="fw-bold mb-3"><i class="bi bi-diagram-3 me-2"></i>Bloom's Taxonomy</h6>
+                    <div class="chart-container"><canvas id="chartBloom"></canvas></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Documents -->
+        <div class="glass-card">
+            <h6 class="fw-bold mb-3"><i class="bi bi-clock-history me-2"></i>Recent Documents</h6>
+            <div class="table-responsive">
+                <table class="table table-dark table-borderless mb-0" style="--bs-table-bg:transparent;">
+                    <thead>
+                        <tr style="color:var(--text-secondary);font-size:0.85rem;">
+                            <th>Document</th><th>Type</th><th>Size</th><th>Status</th><th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="recentDocs">
+                        <tr><td colspan="5" class="text-center text-secondary py-4">Loading...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+{% endblock %}

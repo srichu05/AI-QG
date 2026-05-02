@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}Results{% endblock %}
+
+{% block content %}
+<section class="py-4">
+    <div class="container">
+        <!-- Header -->
+        <div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
+            <div>
+                <h2 class="section-title mb-0">Question Bank</h2>
+                <p class="text-secondary mt-2" id="questionCount">Loading questions...</p>
+            </div>
+            <div class="d-flex gap-2">
+                <a href="{{ url_for('export_page', doc_id=doc_id) }}" class="btn-outline-glass">
+                    <i class="bi bi-download me-1"></i> Export
+                </a>
+                <a href="{{ url_for('dashboard') }}" class="btn-outline-glass">
+                    <i class="bi bi-graph-up me-1"></i> Dashboard
+                </a>
+            </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="filter-bar" id="filterBar">
+            <div class="flex-grow-1">
+                <input type="text" class="filter-input w-100" id="searchInput"
+                       placeholder="🔍 Search questions...">
+            </div>
+            <select class="filter-select" id="filterType">
+                <option value="">All Types</option>
+                <option value="fill_blank">Fill in Blank</option>
+                <option value="wh">WH Questions</option>
+                <option value="short_answer">Short Answer</option>
+                <option value="mcq">MCQ</option>
+            </select>
+            <select class="filter-select" id="filterDifficulty">
+                <option value="">All Difficulty</option>
+                <option value="easy">Easy</option>
+                <option value="medium">Medium</option>
+                <option value="hard">Hard</option>
+            </select>
+            <select class="filter-select" id="filterBloom">
+                <option value="">All Bloom's</option>
+                <option value="remember">Remember</option>
+                <option value="understand">Understand</option>
+                <option value="apply">Apply</option>
+            </select>
+        </div>
+
+        <!-- Question List -->
+        <div id="questionList">
+            <div class="text-center py-5 text-secondary">
+                <div class="spinner-border spinner-border-sm me-2" role="status"></div>
+                Loading questions...
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+const DOC_ID = '{{ doc_id }}';
+</script>
+<script src="{{ url_for('static', filename='js/results.js') }}"></script>
+{% endblock %}

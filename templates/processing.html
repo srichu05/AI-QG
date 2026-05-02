@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+{% block title %}Processing{% endblock %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container" style="max-width: 600px;">
+        <div class="processing-container">
+            <div class="brain-animation"></div>
+            <h3 class="mb-2">Processing Your Document</h3>
+            <p class="text-secondary mb-4" id="currentStage">Initializing pipeline...</p>
+
+            <div class="progress-custom mb-4" style="max-width:400px;margin:0 auto;">
+                <div class="progress-bar-custom" id="pipelineProgress" style="width:0%"></div>
+            </div>
+
+            <ul class="stage-list" id="stageList">
+                <li class="stage-item active" data-stage="Extracting text">
+                    <span class="stage-icon">📄</span> Extracting text
+                </li>
+                <li class="stage-item" data-stage="Analyzing content">
+                    <span class="stage-icon">🔍</span> Analyzing content
+                </li>
+                <li class="stage-item" data-stage="Extracting keywords">
+                    <span class="stage-icon">🔑</span> Extracting keywords
+                </li>
+                <li class="stage-item" data-stage="Ranking sentences">
+                    <span class="stage-icon">📊</span> Ranking sentences
+                </li>
+                <li class="stage-item" data-stage="Generating questions">
+                    <span class="stage-icon">✨</span> Generating questions
+                </li>
+                <li class="stage-item" data-stage="Creating fill-in-the-blanks">
+                    <span class="stage-icon">📝</span> Creating fill-in-the-blanks
+                </li>
+                <li class="stage-item" data-stage="Building MCQs">
+                    <span class="stage-icon">🔘</span> Building MCQs
+                </li>
+                <li class="stage-item" data-stage="Classifying difficulty">
+                    <span class="stage-icon">🏷️</span> Classifying difficulty
+                </li>
+                <li class="stage-item" data-stage="Removing duplicates">
+                    <span class="stage-icon">🧹</span> Removing duplicates
+                </li>
+                <li class="stage-item" data-stage="Saving results">
+                    <span class="stage-icon">💾</span> Saving results
+                </li>
+            </ul>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const docId = '{{ doc_id }}';
+    const stageText = document.getElementById('currentStage');
+    const progressBar = document.getElementById('pipelineProgress');
+    const stageItems = document.querySelectorAll('.stage-item');
+
+    function updateStages(currentStage) {
+        let found = false;
+        stageItems.forEach(item => {
+            const stageName = item.dataset.stage;
+            if (stageName === currentStage) {
+                found = true;
+                item.classList.add('active');
+                item.classList.remove('completed');
+                item.querySelector('.stage-icon').textContent = '⏳';
+            } else if (!found) {
+                item.classList.remove('active');
+                item.classList.add('completed');
+                item.querySelector('.stage-icon').textContent = '✅';
+            } else {
+                item.classList.remove('active', 'completed');
+            }
+        });
+    }
+
+    function pollStatus() {
+        fetch(`/api/status/${docId}`)
+            .then(r => r.json())
+            .then(data => {
+                stageText.textContent = data.stage || 'Processing...';
+                progressBar.style.width = (data.progress || 0) + '%';
+                updateStages(data.stage);
+
+                if (data.stage === 'Complete' && data.progress >= 100) {
+                    stageText.textContent = '✅ Complete! Redirecting...';
+                    setTimeout(() => {
+                        window.location.href = `/results/${docId}`;
+                    }, 1000);
+                    return;
+                }
+
+                if (data.stage === 'Failed') {
+                    stageText.textContent = '❌ Processing failed: ' + (data.error || 'Unknown error');
+                    stageText.style.color = 'var(--accent-rose)';
+                    return;
+                }
+
+                setTimeout(pollStatus, 1500);
+            })
+            .catch(() => setTimeout(pollStatus, 3000));
+    }
+
+    pollStatus();
+});
+</script>
+{% endblock %}

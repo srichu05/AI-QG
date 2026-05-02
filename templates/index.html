@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <h1 class="hero-title fade-in">Transform Documents<br>Into Knowledge</h1>
+        <p class="hero-subtitle fade-in">
+            Upload any educational document and let AI automatically generate a comprehensive
+            question bank with MCQs, fill-in-the-blanks, and more — all classified by difficulty
+            and Bloom's Taxonomy.
+        </p>
+        <a href="{{ url_for('upload_page') }}" class="btn-glow fade-in" id="hero-cta">
+            <i class="bi bi-cloud-upload"></i> Upload Document
+        </a>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="section-title">How It Works</h2>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-3 fade-in">
+                <div class="glass-card feature-card h-100">
+                    <div class="feature-icon blue">📄</div>
+                    <h5>Upload</h5>
+                    <p>Drop your PDF, DOCX, or TXT educational document. We handle the rest.</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3 fade-in" style="animation-delay:0.1s">
+                <div class="glass-card feature-card h-100">
+                    <div class="feature-icon purple">🧠</div>
+                    <h5>Analyze</h5>
+                    <p>Advanced NLP extracts key concepts, ranks sentences, and identifies entities.</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3 fade-in" style="animation-delay:0.2s">
+                <div class="glass-card feature-card h-100">
+                    <div class="feature-icon cyan">✨</div>
+                    <h5>Generate</h5>
+                    <p>AI creates MCQs, WH questions, fill-in-the-blanks, and short-answer questions.</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3 fade-in" style="animation-delay:0.3s">
+                <div class="glass-card feature-card h-100">
+                    <div class="feature-icon green">📊</div>
+                    <h5>Export</h5>
+                    <p>Download your question bank as PDF or CSV with difficulty labels and taxonomy.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Stats Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-6 col-md-3">
+                <div class="glass-card stat-card">
+                    <div class="stat-value" id="stat-types">4</div>
+                    <div class="stat-label">Question Types</div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="glass-card stat-card">
+                    <div class="stat-value">3</div>
+                    <div class="stat-label">Difficulty Levels</div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="glass-card stat-card">
+                    <div class="stat-value">3</div>
+                    <div class="stat-label">Bloom's Levels</div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="glass-card stat-card">
+                    <div class="stat-value">3</div>
+                    <div class="stat-label">File Formats</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Supported Types -->
+<section class="py-5">
+    <div class="container">
+        <div class="glass-card text-center p-5">
+            <h3 class="mb-4">Question Types Generated</h3>
+            <div class="row g-3 justify-content-center">
+                <div class="col-auto"><span class="badge-custom badge-type-fill px-3 py-2 fs-6">📝 Fill in the Blank</span></div>
+                <div class="col-auto"><span class="badge-custom badge-type-wh px-3 py-2 fs-6">❓ WH Questions</span></div>
+                <div class="col-auto"><span class="badge-custom badge-type-short px-3 py-2 fs-6">📋 Short Answer</span></div>
+                <div class="col-auto"><span class="badge-custom badge-type-mcq px-3 py-2 fs-6">🔘 Multiple Choice</span></div>
+            </div>
+            <div class="mt-4">
+                <a href="{{ url_for('upload_page') }}" class="btn-glow">
+                    <i class="bi bi-rocket-takeoff"></i> Get Started
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

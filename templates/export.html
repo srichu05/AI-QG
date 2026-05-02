@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+{% block title %}Export{% endblock %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container" style="max-width: 720px;">
+        <h2 class="section-title mb-4">Export Question Bank</h2>
+
+        <!-- Document Info -->
+        <div class="glass-card mb-4" id="docInfo">
+            <div class="d-flex align-items-center gap-3">
+                <i class="bi bi-file-earmark-text fs-2 text-primary"></i>
+                <div>
+                    <div class="fw-semibold" id="docName">Loading...</div>
+                    <div class="text-secondary" style="font-size:0.85rem;" id="docMeta"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Export Options -->
+        <div class="glass-card mb-4">
+            <h6 class="fw-bold mb-3"><i class="bi bi-gear me-2"></i>Export Format</h6>
+            <div class="row g-3">
+                <div class="col-6">
+                    <div class="export-option glass-card text-center p-4" id="optPdf" style="cursor:pointer;border-color:var(--accent-blue);" onclick="selectFormat('pdf')">
+                        <i class="bi bi-file-earmark-pdf fs-1" style="color:var(--accent-rose);"></i>
+                        <div class="fw-bold mt-2">PDF</div>
+                        <div class="text-secondary" style="font-size:0.8rem;">Professional question bank with answer key</div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="export-option glass-card text-center p-4" id="optCsv" style="cursor:pointer;" onclick="selectFormat('csv')">
+                        <i class="bi bi-file-earmark-spreadsheet fs-1" style="color:var(--accent-green);"></i>
+                        <div class="fw-bold mt-2">CSV</div>
+                        <div class="text-secondary" style="font-size:0.8rem;">Spreadsheet-compatible data export</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Export Button -->
+        <div class="text-center">
+            <button class="btn-glow" id="exportBtn" onclick="doExport()">
+                <i class="bi bi-download"></i> Generate Export
+            </button>
+        </div>
+
+        <!-- Download Link -->
+        <div id="downloadSection" class="mt-4" style="display:none;">
+            <div class="glass-card text-center p-4" style="border-color:var(--accent-green);">
+                <i class="bi bi-check-circle fs-1" style="color:var(--accent-green);"></i>
+                <h5 class="mt-2">Export Ready!</h5>
+                <a id="downloadLink" href="#" class="btn-glow mt-3" download>
+                    <i class="bi bi-download"></i> Download File
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+const DOC_ID = '{{ doc_id }}';
+let selectedFormat = 'pdf';
+
+function selectFormat(fmt) {
+    selectedFormat = fmt;
+    document.getElementById('optPdf').style.borderColor = fmt === 'pdf' ? 'var(--accent-blue)' : 'var(--border-glass)';
+    document.getElementById('optCsv').style.borderColor = fmt === 'csv' ? 'var(--accent-blue)' : 'var(--border-glass)';
+}
+
+function doExport() {
+    const btn = document.getElementById('exportBtn');
+    btn.disabled = true;
+    btn.innerHTML = '<i class="bi bi-hourglass-split"></i> Generating...';
+
+    fetch(`/api/export/${DOC_ID}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ format: selectedFormat }),
+    })
+    .then(r => r.json())
+    .then(data => {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="bi bi-download"></i> Generate Export';
+
+        if (data.success && data.download_url) {
+            document.getElementById('downloadLink').href = data.download_url;
+            document.getElementById('downloadSection').style.display = 'block';
+        } else {
+            alert('Export failed: ' + (data.error || 'Unknown error'));
+        }
+    })
+    .catch(() => {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="bi bi-download"></i> Generate Export';
+        alert('Export failed. Please try again.');
+    });
+}
+
+// Load doc info
+fetch(`/api/questions/${DOC_ID}`)
+    .then(r => r.json())
+    .then(data => {
+        const total = data.total || 0;
+        document.getElementById('docMeta').textContent = `${total} questions available for export`;
+    });
+</script>
+{% endblock %}
