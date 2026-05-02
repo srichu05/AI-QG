@@ -74,7 +74,7 @@ Edit `.env` with your credentials:
 python app.py
 ```
 
-Visit **http://localhost:5000**
+Visit **https://ai-qg.onrender.com/**
 
 ---
 
